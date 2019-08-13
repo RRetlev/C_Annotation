@@ -24,21 +24,22 @@ public class Test {
 
         public void handle(HttpExchange t) throws IOException {
             Class<Routes> routesClass = Routes.class;
+            String response = "This is the response";
 
             for (Method m: Routes.class.getMethods()){
                 if(m.isAnnotationPresent(Webroute.class)){
                     Annotation annotation = m.getAnnotation(Webroute.class);
                     Webroute webroute = (Webroute) annotation;
                     String path = t.getRequestURI().getPath();
+                    System.out.println(path);
+                    System.out.println(webroute.path());
                     if (webroute.path().equals(getFirstSegmentOfURI(path))){
                         try{
                             System.out.println("before invoke");
-                            m.invoke(null);
+                             response = (String) m.invoke(null);
                             System.out.println("alma");
-                        }catch (IllegalAccessException   e){
+                        }catch (IllegalAccessException | InvocationTargetException e){
                             e.printStackTrace();
-                        }catch ( InvocationTargetException f){
-                            f.printStackTrace();
                         }
                     }
                 }
@@ -48,7 +49,6 @@ public class Test {
 
 
 
-            String response = "This is the response";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
