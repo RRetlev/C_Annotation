@@ -33,7 +33,7 @@ public class Test {
                     if (webroute.path().equals(getFirstSegmentOfURI(path))){
                         try{
                             System.out.println("before invoke");
-                            m.invoke(routesClass,t);
+                            m.invoke(null);
                             System.out.println("alma");
                         }catch (IllegalAccessException   e){
                             e.printStackTrace();
